@@ -1,0 +1,131 @@
+#####simple database
+
+
+### 1 main file / flask code
+
+from flask import Flask, request, flash, url_for, redirect, render_template
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.sqlite3'
+app.config['SECRET_KEY'] = "random string"
+
+db = SQLAlchemy(app)
+
+class students(db.Model):
+   id_= db.Column('student_id', db.Integer, primary_key = True)
+   name = db.Column(db.String(100))
+   city = db.Column(db.String(50))
+   age = db.Column(db.String(200)) 
+
+
+   def __init__(self, name, city, age):
+       self.name = name
+       self.city = city
+       self.age = age
+
+#######
+@app.route('/')
+def show_all():
+   return render_template('show_all.html', students = students.query.all() )
+
+#######
+@app.route('/new', methods = ['GET', 'POST'])
+def new():
+   if request.method == 'POST':
+      if not request.form['name_'] or not request.form['city_'] or not request.form['age_']:
+         flash('Please enter all the fields', 'error')
+      else:
+         student = students(request.form['name_'], request.form['city_'],request.form['age_'])
+         
+         db.session.add(student)
+         db.session.commit()
+         flash('Record was successfully added')
+         
+         return redirect(url_for('show_all'))
+     
+   return render_template('new.html')
+
+if __name__ == '__main__':
+   db.create_all()#To create / use database mentioned in URI, run the create_all() method
+   app.run()
+
+
+##################################
+
+### 2_ show all / html file
+
+<!DOCTYPE html>
+<html lang = "en">
+   <head><title>show_all page</title></head>
+    
+   <body>
+   <h1>this is show_all page</h1>
+      <h3>
+         <a href = "{{ url_for('show_all') }}">Comments - Flask SQLAlchemy example</a>
+      </h3>
+      
+
+      {% for message in get_flashed_messages() %}
+         {{ message }}
+      {% endfor %}
+		
+      <h3>Students (<a href = "{{ url_for('new') }}">Add Student</a>)</h3>
+      
+      <table>
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>City</th>
+               <th>Age</th>
+
+            </tr>
+         </thead>
+
+         <tbody>
+            {% for student in students %}
+               <tr>
+                  <td>{{ student.name }}</td>
+                  <td>{{ student.city }}</td>
+                  <td>{{ student.age }}</td>
+
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+   </body>
+</html>
+
+
+#############################
+
+### 3 new /html file
+
+<!DOCTYPE html>
+<html>
+<head><title>new page</title></head>
+   <body>
+      <h3>Students - Flask SQLAlchemy example</h3>
+
+      
+      {% for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+      {% endfor %}
+      <h1>this is new page</h1>
+      <form action = "#" method = "post">
+         <label for = "name">NAME</label><br>
+         <input type = "text" name = "name_" placeholder = "Name" /><br>
+         
+         <label for = "email">CITY</label><br>
+         <input type = "text" name = "city_" placeholder = "city" /><br>
+         
+         <label for = "age">AGE</label><br>
+         <input type = "text"  name = "age_" placeholder = "age" /><br>
+         
+ 
+         <input type = "submit" value = "Submit" />
+      </form>
+   </body>
+</html>

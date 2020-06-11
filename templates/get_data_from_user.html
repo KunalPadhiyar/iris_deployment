@@ -1,0 +1,33 @@
+
+{% extends "base.html" %}
+<!doctype html>
+<html>
+    {% block content %}
+    <head>
+    <title>get data Page  </title>
+    </head>
+
+    
+    <body>
+    <h1>this is get data page</h1>
+    
+    <form action="#" method="post">
+        
+         <label for = "sl_">Sepal length in cm.</label><br>
+         <input type = "number" name = "sl" step="0.01" required /><br>
+         
+         <label for = "sw_">Sepal width in cm.</label><br>
+         <input type = "text" name = "sw" required /><br>
+         
+         <label for = "pw_">petal width in cm.</label><br>
+         <input type = "text"  name = "pw" required /><br>
+         
+ 
+         <input type = "submit" value = "Submit" />
+         
+      </form>
+
+    </body>
+    
+    {% endblock %}
+</html>

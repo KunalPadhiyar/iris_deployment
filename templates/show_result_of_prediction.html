@@ -1,0 +1,21 @@
+
+{% extends "base.html" %}
+<!doctype html>
+<html>
+    {% block content %}
+    <head>
+    <title>show result Page  </title>
+    </head>
+
+    
+    <body>
+    <h1>this is result page</h1>
+    <h3>sepal length = {{ip_data["sl"]}}<h3>
+    <h3>sepal width = {{ip_data["sw"]}}<h3>
+    <h3>petal width = {{ip_data["pw"]}}<h3>
+    <h1 style="color:RED;">the flower is {{ip_data["result"]}}</h1>
+    
+    </body>
+    
+    {% endblock %}
+</html>
