@@ -61,9 +61,7 @@ def get_data():
 def show_pred_result():
     return render_template("show_result_of_prediction.html",ip_data=data_dict)
 
-@app.route("/about_us")
-def about_us():
-    return f"<h1>this simple flask app,deploy on heroku. made by Kunal Padhiyar.God_Father<h1>"
+
 
 if __name__=="__main__":
     app.run()
